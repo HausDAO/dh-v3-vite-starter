@@ -12,12 +12,14 @@ import {
   useDaoMember,
   useDaoMembers,
 } from "@daohaus/moloch-v3-hooks";
-import { useDHConnect } from "@daohaus/connect";
+// import { useDHConnect } from "@daohaus/connect";
+import { useAccount } from "wagmi";
 
 export function RageQuit() {
   const { dao, refetch } = useDaoData();
   const { daoId, daoChain } = useCurrentDao();
-  const { address } = useDHConnect();
+  // const { address } = useDHConnect();
+  const { address } = useAccount();
   const { member: connectedMember, refetch: refetchMember } = useDaoMember({
     memberAddress: address,
     // @ts-expect-error: need to fix in hooks package

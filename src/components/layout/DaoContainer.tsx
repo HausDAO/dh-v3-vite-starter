@@ -1,11 +1,13 @@
 import { useMemo } from "react";
 import { Outlet, useLocation, useParams } from "react-router-dom";
 
-import { DHLayout, useDHConnect } from "@daohaus/connect";
+// import { DHLayout, useDHConnect } from "@daohaus/connect";
 import { TXBuilder } from "@daohaus/tx-builder";
 import { ValidNetwork } from "@daohaus/keychain-utils";
 import { CurrentDaoProvider, useDaoData } from "@daohaus/moloch-v3-hooks";
-import { HeaderAvatar } from "../HeaderAvatar";
+// import { HeaderAvatar } from "../HeaderAvatar";
+import { ConnectKitButton } from "connectkit";
+import { useAccount, usePublicClient } from "wagmi";
 
 export const DaoContainer = () => {
   const { proposalId, memberAddress, daoChain, daoId } = useParams<{
@@ -40,7 +42,9 @@ const Dao = ({
 }) => {
   const location = useLocation();
 
-  const { publicClient, address } = useDHConnect();
+  // const { publicClient, address } = useDHConnect();
+  const { address } = useAccount();
+  const publicClient = usePublicClient();
   const { dao } = useDaoData({
     daoId: daoId as string,
     daoChain: daoChain as string,
@@ -67,20 +71,22 @@ const Dao = ({
   }, [daoChain, daoId, address]);
 
   return (
-    <DHLayout
-      pathname={location.pathname}
-      navLinks={navLinks}
-      leftNav={
-        dao?.name &&
-        dao?.id && (
-          <HeaderAvatar
-            name={dao.name}
-            address={dao.id}
-            imgUrl={dao?.avatarImg}
-          />
-        )
-      }
-    >
+    // <DHLayout
+    //   pathname={location.pathname}
+    //   navLinks={navLinks}
+    //   leftNav={
+    //     dao?.name &&
+    //     dao?.id && (
+    //       <HeaderAvatar
+    //         name={dao.name}
+    //         address={dao.id}
+    //         imgUrl={dao?.avatarImg}
+    //       />
+    //     )
+    //   }
+    // >
+    <>
+      <ConnectKitButton />
       <CurrentDaoProvider
         userAddress={address}
         targetDao={{
@@ -100,6 +106,7 @@ const Dao = ({
           <Outlet />
         </TXBuilder>
       </CurrentDaoProvider>
-    </DHLayout>
+    </>
+    // </DHLayout>
   );
 };
